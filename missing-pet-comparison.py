@@ -22,18 +22,19 @@ headers = {
 auth = requests.post('https://'+region+'.battle.net/oauth/token', data=headers)
 token = json.loads(auth.text)
 
+# Function to request data from Blizzard, and then load the returned text string as JSON list
 def dataRequest(region,server,character,token):
-    # Request my data from Blizzard, load the returned text string as JSON
-    me = requests.get('https://'+region+'.api.blizzard.com/wow/character/'+server+'/'+character+'?fields=pets&locale=en_US&access_token='+token['access_token'])
-    if (me.status_code == 401): # Error handling: Invalid access token!
-        exit('Error During Run: ' + me['reason'])
+    get = requests.get('https://'+region+'.api.blizzard.com/wow/character/'+server+'/'+character+'?fields=pets&locale=en_US&access_token='+token['access_token'])
+    if (get.status_code == 401): # Error handling: Invalid access token!
+        exit('Error During Run: ' + get['reason'])
     else:
-        dataRequest = json.loads(me.text)
+        dataRequest = json.loads(get.text)
     if ('status' in dataRequest.keys()): # The 'status' key only appears when the character or server is misspelled or missing.
         exit('Error Obtaining Data For ' + character + ' ' +server + ': ' + dataRequest['reason'])
     else:
         return dataRequest
 
+# Setting up variables to call the dataRequest function for each character
 myData = dataRequest(region,myServer,myCharacter,token)
 targetData = dataRequest(region,targetServer,targetCharacter,token)
 
