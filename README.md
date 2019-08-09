@@ -1,5 +1,5 @@
 # happy-pet-basket
-Interacts with Blizzard US WoW API to build a list of a friend's missing pets, that you own.
+Interacts with Blizzard's WoW API to build a list of a friend's missing pets, that you own.
 
 ### Requirements
 * Python 3.4 or better
