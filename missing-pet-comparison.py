@@ -23,16 +23,16 @@ auth = requests.post('https://'+region+'.battle.net/oauth/token', data=headers)
 token = json.loads(auth.text)
 
 # Function to request data from Blizzard, and then load the returned text string as JSON list
-def dataRequest(region,server,character,token):
+def data_request(region,server,character,token):
     get = requests.get('https://'+region+'.api.blizzard.com/wow/character/'+server+'/'+character+'?fields=pets&access_token='+token['access_token'])
     if (get.status_code == 401): # Error handling: Invalid access token!
         exit('Error During Run: ' + get['reason'])
     else:
-        dataRequest = json.loads(get.text)
-    if ('status' in dataRequest.keys()): # The 'status' key only appears when the character or server is misspelled or missing.
-        exit('Error Obtaining Data For ' + character + ' ' +server + ': ' + dataRequest['reason'])
+        data_request = json.loads(get.text)
+    if ('status' in data_request.keys()): # The 'status' key only appears when the character or server is misspelled or missing.
+        exit('Error Obtaining Data For ' + character + ' ' +server + ': ' + data_request['reason'])
     else:
-        return dataRequest
+        return data_request
 
 # Setup empty list, loop through the target array variable, and append Creature Names to the empty list
 def pet_list(target):
@@ -41,9 +41,9 @@ def pet_list(target):
         pets.append(target[i]['creatureName'])
     return pets
 
-# Setting up variables to call the dataRequest function for each character
-myData = dataRequest(region,myServer,myCharacter,token)
-targetData = dataRequest(region,targetServer,targetCharacter,token)
+# Setting up variables to call the data_request function for each character
+myData = data_request(region,myServer,myCharacter,token)
+targetData = data_request(region,targetServer,targetCharacter,token)
 
 # Calling the pet_list() function to get the collected data for each character
 myPets = pet_list(myData['pets']['collected'])
