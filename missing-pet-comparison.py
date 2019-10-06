@@ -24,7 +24,7 @@ token = json.loads(auth.text)
 
 # Function to request data from Blizzard, and then load the returned text string as JSON list
 def dataRequest(region,server,character,token):
-    get = requests.get('https://'+region+'.api.blizzard.com/wow/character/'+server+'/'+character+'?fields=pets&locale=en_US&access_token='+token['access_token'])
+    get = requests.get('https://'+region+'.api.blizzard.com/wow/character/'+server+'/'+character+'?fields=pets&access_token='+token['access_token'])
     if (get.status_code == 401): # Error handling: Invalid access token!
         exit('Error During Run: ' + get['reason'])
     else:
@@ -34,21 +34,20 @@ def dataRequest(region,server,character,token):
     else:
         return dataRequest
 
+# Setup empty list, loop through the target array variable, and append Creature Names to the empty list
+def pet_list(target):
+    pets = []
+    for i in range(0, len(target)):
+        pets.append(target[i]['creatureName'])
+    return pets
+
 # Setting up variables to call the dataRequest function for each character
 myData = dataRequest(region,myServer,myCharacter,token)
 targetData = dataRequest(region,targetServer,targetCharacter,token)
 
-# Setup empty list, loop through the 'myRawPets' array variable, and append Creature Names to the empty list
-myPets = []
-myRawPets = myData['pets']['collected']
-for i in range(0, len(myRawPets)):
-    myPets.append(myRawPets[i]['creatureName'])
-
-# Setup empty list, loop through the 'targetRawPets' array variable, and append Creature Names to the empty list
-targetPets = []
-targetRawPets = targetData['pets']['collected']
-for i in range(0, len(targetRawPets)):
-    targetPets.append(targetRawPets[i]['creatureName'])
+# Calling the pet_list() function to get the collected data for each character
+myPets = pet_list(myData['pets']['collected'])
+targetPets = pet_list(targetData['pets']['collected'])
 
 # Result of comparing my pets vs target pets, set as variable, and sorted alphabetically
 result = list(set(myPets) - set(targetPets))
