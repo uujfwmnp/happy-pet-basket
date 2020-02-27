@@ -49,8 +49,9 @@ targetData = data_request(region,targetServer,targetCharacter,token)
 myPets = pet_list(myData['pets']['collected'])
 targetPets = pet_list(targetData['pets']['collected'])
 
-# Result of comparing my pets vs target pets, set as variable, and sorted alphabetically
+# Result of comparing my pets vs target pets, set as variable, duplicates removed, and sorted alphabetically
 result = list(set(myPets) - set(targetPets))
+result = list(dict.fromkeys(result))
 result.sort(key=str.lower)
 
 # Creating and writing to a text file, to list the missing pets
