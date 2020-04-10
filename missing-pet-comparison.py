@@ -50,17 +50,22 @@ targetPets = pet_list(targetData['pets'])
 
 # Result of comparing my pets vs target pets, set as variable, duplicates removed, and sorted alphabetically
 result = list(set(myPets) - set(targetPets))
-result = list(dict.fromkeys(result))
 result.sort(key=str.lower)
+
+# Creating an output array giving the name of the pet, and the number of each owned
+output = {}
+for i in range(0, len(result)):
+    output[result[i]] = str(myPets.count(myPets[i]))
 
 # Creating and writing to a text file, to list the missing pets
 file = open(myCharacter+' vs '+targetCharacter+'.txt','w+')
-file.write('These are the pets that "'+targetCharacter+'-'+targetServer+'" is missing. You have have at least one of each pet in this list:\n\n')
+file.write('These are the pets that "'+targetCharacter+'-'+targetServer+'" is missing:\n\n')
 
 # A nice screen printing of the results, making sure to also write the results into the text file
-for i in range(0, len(result)):
-    print(result[i])
-    file.write(result[i]+'\n')
+file.write('# Pets Owned'+'\t'+'Pet Name'+'\n')
+for name,number in output.items():
+    print(number +'\t\t'+ name)
+    file.write(number +'\t\t'+ name+'\n')
 
 # Closing the newly created file
 file.close()
