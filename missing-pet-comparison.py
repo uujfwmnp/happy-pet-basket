@@ -52,10 +52,11 @@ targetPets = pet_list(targetData['pets'])
 result = list(set(myPets) - set(targetPets))
 result.sort(key=str.lower)
 
-# Creating an output array giving the name of the pet, and the number of each owned
+# Creating an output array giving the name of the pet, and the number of each owned (if you have more than 1)
 output = {}
-for i in range(0, len(result)):
-    output[result[i]] = str(myPets.count(myPets[i]))
+for pet_name in result:
+    if (myPets.count(pet_name) >= 2):
+        output[pet_name] = str(myPets.count(pet_name))
 
 # Creating and writing to a text file, to list the missing pets
 file = open(myCharacter+' vs '+targetCharacter+'.txt','w+')
